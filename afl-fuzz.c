@@ -5431,12 +5431,10 @@ u8 higher_order_fuzzing(struct queue_entry *current_queue_entry, s32 *temp_len,
 
       switch(d_level) {
         case 0:
-          if (total_first_chunks > 1)
+          if (total_first_chunks > 1) {
             chunk_to_delete = get_chunk_to_delete(
                 first_chunks_array, total_first_chunks, &del_from, &del_len);
-
-          if (first_chunks_array != NULL)
-            free(first_chunks_array);
+          }
 
         case 1:
 
@@ -5446,23 +5444,26 @@ u8 higher_order_fuzzing(struct queue_entry *current_queue_entry, s32 *temp_len,
                 second_chunks_array, total_second_chunks, &del_from, &del_len);
           }
 
-          if (second_chunks_array != NULL)
-            free(second_chunks_array);
-
         case 2:
           /* If chunk not found, we try the deeper-level chunks */
           if (del_len == 0 && total_deeper_chunks > 1) {
             chunk_to_delete = get_chunk_to_delete(
                 deeper_chunks_array, total_deeper_chunks, &del_from, &del_len);
           }
-
-          if (deeper_chunks_array != NULL)
-            free(deeper_chunks_array);
           break;
 
         default:
           break;
       }
+
+      if (first_chunks_array != NULL)
+            free(first_chunks_array);
+
+      if (second_chunks_array != NULL)
+            free(second_chunks_array);
+
+      if (deeper_chunks_array != NULL)
+            free(deeper_chunks_array);
 
       if (del_len != 0 && del_len < *temp_len) {
         if (smart_log_mode) {
